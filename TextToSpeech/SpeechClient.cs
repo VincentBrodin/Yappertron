@@ -92,8 +92,6 @@ public static class SpeechClient {
 		speechConfig.SetProfanity(ProfanityOption.Raw);
 		speechConfig.SpeechRecognitionLanguage = "en-US";
 		speechConfig.SpeechSynthesisVoiceName = "en-US-AndrewMultilingualNeural";
-		speechConfig.OutputFormat = OutputFormat.Detailed;
-		speechConfig.RequestWordLevelTimestamps();
 	}
 
 
