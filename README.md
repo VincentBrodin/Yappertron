@@ -1,4 +1,8 @@
-﻿# Azure Speech Synthesizer Credentials and Environment Variable Setup
+﻿# Yappertron
+
+Yappertron is a dynamic video creation tool that combines text-to-speech (TTS) technology with video processing. It takes multiple text documents (containing stories, scripts, or any narrative content) and a background video, generates TTS audio from the texts, overlays the audio onto the video, and trims the video to match the length of the audio. This makes it easy to produce narrated videos quickly and efficiently.
+
+# Azure Speech Synthesizer Credentials and Environment Variable Setup
 
 This guide explains how to obtain your Azure Speech Synthesizer credentials and configure the required environment variables on Windows. These steps are essential for authenticating your application with the Azure Speech Service.
 
