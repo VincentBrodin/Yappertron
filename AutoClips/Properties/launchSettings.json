@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "AutoClips": {
+      "commandName": "Project",
+      "commandLineArgs": "\"stories.txt\""
+    }
+  }
+}

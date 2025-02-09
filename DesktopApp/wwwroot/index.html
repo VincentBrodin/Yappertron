@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!--<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width" />-->
+    <link href="/css/output.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body class="w-screen h-screen bg-gradient-theme">
+    <form class="w-screen h-screen flex flex-col justify-center items-center" id="send">
+
+        <h1 class="text-2xl">Yappertron🤖</h1>
+
+        <label class="form-control w-96 mt-5">
+            <div class="label">
+                <span class="label-text text-lg">Stories</span>
+            </div>
+            <input required type="file" accept=".txt" multiple id="files" name="files" class="file-input file-input-bordered file-input-primary w-full" />
+        </label>
+
+        <div class="w-96 px-4 mt-5">
+            <h2 id="file-count" class="text-lg ">0 files added</h2>
+        </div>
+        <div id="file-list" class="w-96 mt-1 p-4 overflow-auto bg-base-200 border-2  rounded-md shadow-lg" style="height: 200px;">
+            <p>No files selected.</p>
+        </div>
+
+        <label class="form-control w-96 mt-5">
+            <div class="label">
+                <span class="label-text text-lg">Background Video</span>
+            </div>
+            <input required type="file" accept=".mp4" id="video" name="video" class="file-input file-input-bordered file-input-primary w-full" />
+        </label>
+
+        <button class="w-96 btn btn-primary mt-5">Generate Video</button>
+
+    </form>
+
+    <div id="loading" class="noOverlay fixed inset-0 z-50 items-center justify-center bg-black bg-opacity-50 backdrop-blur-md">
+        <div class="w-96 rounded-lg border border-primary bg-base-100 p-5 text-center shadow-lg flex flex-col justify-center items-center" style="height: 200px;">
+            <h1 class="mb-5 text-xl font-bold">Loading...</h1>
+            <span class="loading loading-infinity loading-lg"></span>
+        </div>
+    </div>
+
+
+    <div id="done" class=" noOverlay fixed inset-0 z-50 items-center justify-center bg-black bg-opacity-50 backdrop-blur-md">
+        <div class="w-96 rounded-lg border border-primary bg-base-100 p-5 text-center shadow-lg flex flex-col justify-center items-center">
+            <h1 class="mb-5 text-xl font-bold">Your videos are done 🥳</h1>
+            <div id="output-list" class="w-full overflow-auto mt-1" style="height: 200px;">
+            </div>
+            <button class="btn btn-primary w-full mt-5" onclick="HideDone()">Close</button>
+        </div>
+    </div>
+
+    <script src="js/index.js"></script>
+</body>
+</html>
