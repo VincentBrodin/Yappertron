@@ -13,7 +13,7 @@ public static class VideoBuilder {
 		List<string> outputs = [];
 
 		for(int i = 0; i < files.Length; i++) {
-			Console.WriteLine($"Starting with {i + 1}/{files.Length}");
+			Logger.Write($"Starting with {i + 1}/{files.Length}");
 			string file = files[i];
 
 			string outputPath = Path.Combine(path, $"{Path.GetFileNameWithoutExtension(file)}.mp4");
@@ -30,7 +30,7 @@ public static class VideoBuilder {
 
 			await FFmpegClient.CutVideoWithAudio(videoPath, audioPath, outputPath, videoStart, videoEnd);
 
-			Console.WriteLine($"Done with {i + 1}/{files.Length}");
+			Logger.Write($"Done with {i + 1}/{files.Length}");
 
 			outputs.Add(Path.GetFileName(outputPath));
 

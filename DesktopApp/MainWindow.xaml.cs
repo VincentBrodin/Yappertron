@@ -19,6 +19,8 @@ public partial class MainWindow : Window {
 	protected override async void OnInitialized(EventArgs e) {
 		base.OnInitialized(e);
 
+		Logger.Write("Started");
+
 		await Web.EnsureCoreWebView2Async();
 		Web.CoreWebView2.WebMessageReceived += router.MessageRecived;
 		string assetPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot");
@@ -33,44 +35,52 @@ public partial class MainWindow : Window {
 		//foreach(string file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.*")) {
 		//	files.Add(Path.GetFileName(file));
 		//}
-		//Console.WriteLine(JsonSerializer.Serialize(new { id = "outputs", content = files }));
+		//Logger.Write(JsonSerializer.Serialize(new { id = "outputs", content = files }));
 
 		//Web.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(new { id = "outputs", content = files }));
 		//Process.Start("explorer.exe", $@"{Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory)}");
 	}
 
 	private async Task Generate(WebMessage webMessage) {
-		Console.WriteLine("Got message");
-		Console.WriteLine("Generating temp file");
-		// Generate temp dir 
-		string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "temp");
-		if(!Directory.Exists(path)) {
+		try {
+
+			Logger.Write("Got message");
+			Logger.Write("Generating temp file");
+			// Generate temp dir 
+			string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "temp");
+			if(!Directory.Exists(path)) {
+				Directory.CreateDirectory(path);
+			}
+			path = Path.Combine(path, Guid.NewGuid().ToString());
 			Directory.CreateDirectory(path);
+
+			Logger.Write("Writing files...");
+			GenerateMessage message = JsonSerializer.Deserialize<GenerateMessage>(webMessage.Content);
+
+			byte[] videoData = Convert.FromBase64String(message.Content.Video.Base64Data);
+			await File.WriteAllBytesAsync(Path.Combine(path, message.Content.Video.Name), videoData);
+			Logger.Write("Video done");
+
+			for(int i = 0; i < message.Content.Files.Count; i++) {
+				FileData file = message.Content.Files[i];
+				byte[] fileData = Convert.FromBase64String(file.Base64Data);
+				await File.WriteAllBytesAsync(Path.Combine(path, file.Name), fileData);
+				Logger.Write($"{i + 1}/{message.Content.Files.Count}");
+			}
+			Logger.Write("Done");
+
+			List<string> outputs = await VideoBuilder.BuildFolder(path);
+
+			Logger.Write("Cleaning up...");
+
+			Web.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(new { id = "outputs", content = outputs }));
+			Process.Start("explorer.exe", $@"{path}");
 		}
-		path = Path.Combine(path, Guid.NewGuid().ToString());
-		Directory.CreateDirectory(path);
-
-		Console.WriteLine("Writing files...");
-		GenerateMessage message = JsonSerializer.Deserialize<GenerateMessage>(webMessage.Content);
-
-		byte[] videoData = Convert.FromBase64String(message.Content.Video.Base64Data);
-		await File.WriteAllBytesAsync(Path.Combine(path, message.Content.Video.Name), videoData);
-		Console.WriteLine("Video done");
-
-		for(int i = 0; i < message.Content.Files.Count; i++) {
-			FileData file = message.Content.Files[i];
-			byte[] fileData = Convert.FromBase64String(file.Base64Data);
-			await File.WriteAllBytesAsync(Path.Combine(path, file.Name), fileData);
-			Console.WriteLine($"{i + 1}/{message.Content.Files.Count}");
+		catch(Exception exeption) {
+			Logger.Write(exeption.ToString());
+			Logger.Write(new string('=', 20));
+			Logger.Write(exeption.Message);
 		}
-		Console.WriteLine("Done");
-
-		List<string> outputs = await VideoBuilder.BuildFolder(path);
-
-		Console.WriteLine("Cleaning up...");
-
-		Web.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(new { id = "outputs", content = outputs }));
-		Process.Start("explorer.exe", $@"{path}");
 	}
 
 
