@@ -39,8 +39,6 @@ This guide explains how to obtain your Azure Speech Synthesizer credentials and 
 
 Your application will use the `SPEECH_KEY` and `SPEECH_REGION` environment variables to authenticate with the Azure Speech Service.
 
-### Method 1: Using Command Prompt
-
 1. **Open Command Prompt as Administrator:**
    - Click **Start**, type `cmd`, right-click **Command Prompt**, and choose **Run as administrator**.
 
